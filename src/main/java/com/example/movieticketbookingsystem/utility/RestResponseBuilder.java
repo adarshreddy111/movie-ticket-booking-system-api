@@ -8,18 +8,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class RestResponseBuilder{
 
-
-    public <T> ResponseEntity<ResponseStructure<T>> sucess(HttpStatus statusCode, String message, T data){
-        return ResponseEntity.status(statusCode).body(ResponseStructure.<T>builder()
-                .StatusCode(statusCode.value())
-                .message(message)
-                .data(data)
-                .build());
-    }
-
+        public <U> ResponseEntity<ResponseStructure<U>> success(HttpStatus status, String message, U data) {
+            ResponseStructure<U> structure = ResponseStructure.<U>builder()
+                    .status(status.value())
+                    .message(message)
+                    .data(data)
+                    .build();
+            return ResponseEntity.status(status).body(structure);
+        }
     public ResponseEntity<ErrorStructure> error(HttpStatus statusCode, String message){
         return ResponseEntity.status(statusCode).body(ErrorStructure.builder()
-                .statusCode(statusCode.value())
+                .errorCode(statusCode.value())
                 .errorMessage(message)
                 .build());
     }

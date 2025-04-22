@@ -1,4 +1,4 @@
-package com.example.movieticketbookingsystem.exception;
+package com.example.movieticketbookingsystem.exception.handler;
 import com.example.movieticketbookingsystem.exception.UserExistByEmailException;
 import com.example.movieticketbookingsystem.utility.ErrorStructure;
 import com.example.movieticketbookingsystem.utility.RestResponseBuilder;
