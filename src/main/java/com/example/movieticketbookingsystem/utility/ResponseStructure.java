@@ -6,8 +6,8 @@ import lombok.Setter;
 
 @Getter
 @Builder
-public class ResponseStructure<T> {
-    private int StatusCode;
+public class ResponseStructure<U> {
+    private int status;
     private String message;
-    private T data;
+    private U data;
 }

@@ -1,5 +1,6 @@
 package com.example.movieticketbookingsystem.controller;
 
+import com.example.movieticketbookingsystem.dto.UserRegistrationRequest;
 import com.example.movieticketbookingsystem.entity.UserDetails;
 import com.example.movieticketbookingsystem.service.UserService;
 import com.example.movieticketbookingsystem.utility.ResponseStructure;
@@ -21,9 +22,9 @@ public class UserController {
     private final RestResponseBuilder responseBuilder;
 
     @PostMapping("/register")
-    public ResponseEntity<ResponseStructure<UserDetails>> addUser(@RequestBody UserDetails user){
+    public ResponseEntity<ResponseStructure<UserDetails>> addUser(@RequestBody UserRegistrationRequest user){
         UserDetails userDetails = userService.addUser(user);
-        return responseBuilder.sucess(HttpStatus.OK,"New User Details Has been added", userDetails);
+        return responseBuilder.success(HttpStatus.OK,"New User Details Has been added", userDetails);
     }
 
 
