@@ -4,5 +4,5 @@ import com.example.movieticketbookingsystem.dto.UserRegistrationRequest;
 import com.example.movieticketbookingsystem.entity.UserDetails;
 
 public interface UserService {
-    public UserDetails addUser(UserRegistrationRequest user);
+    public UserDetails addUser(UserDetails user);
 }
