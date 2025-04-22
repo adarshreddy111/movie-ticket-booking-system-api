@@ -20,31 +20,30 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails addUser(UserRegistrationRequest user) {
-        System.out.println(user);
-        if (userRepository.existsByEmail(user.email())) {
-//            return copy(user);
+    public UserDetails addUser(UserDetails user) {
+        if (userRepository.existsByEmail(user.getEmail()))
             throw new UserExistByEmailException("User with the Email is already exists");
-
-        }
-        UserDetails userDetails = switch (user.userRole()) {
+//            return copy(user);
+        switch (user.getUserRole()) {
             case USER -> copy(new User(), user);
             case THEATER_OWNER -> copy(new TheaterOwner(), user);
-        };
+        }
         System.out.println(user);
-        return userDetails;
-
+        return user;
 
     }
 
-    private UserDetails copy(UserDetails userRole, UserRegistrationRequest user) {
+    private UserDetails copy(UserDetails userRole, UserDetails user) {
 //        UserDetails userRole = user.getUserRole()==UserRole.USER ? new User() : new TheaterOwner();
-        userRole.setUserRole(user.userRole());
-        userRole.setEmail(user.email());
-        userRole.setPassword(user.password());
-        userRole.setDateOfBirth(user.dateOfBirth());
-        userRole.setPhoneNumber(user.phoneNumber());
-        userRole.setUsername(user.username());
+        userRole.setUserRole(user.getUserRole());
+        userRole.setEmail(user.getEmail());
+        userRole.setPassword(user.getPassword());
+        userRole.setCreatedAt(user.getCreatedAt());
+        userRole.setDateOfBirth(user.getDateOfBirth());
+        userRole.setPhoneNumber(user.getPhoneNumber());
+        userRole.setUsername(user.getUsername());
+        userRole.setUpdatedAt(user.getUpdatedAt());
+        userRole.setUserId(user.getUserId());
         userRepository.save(userRole);
         return userRole;
     }

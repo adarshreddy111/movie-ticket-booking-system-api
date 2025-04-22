@@ -22,7 +22,7 @@ public class UserController {
     private final RestResponseBuilder responseBuilder;
 
     @PostMapping("/register")
-    public ResponseEntity<ResponseStructure<UserDetails>> addUser(@RequestBody UserRegistrationRequest user){
+    public ResponseEntity<ResponseStructure<UserDetails>> addUser(@RequestBody UserDetails user){
         UserDetails userDetails = userService.addUser(user);
         return responseBuilder.success(HttpStatus.OK,"New User Details Has been added", userDetails);
     }
