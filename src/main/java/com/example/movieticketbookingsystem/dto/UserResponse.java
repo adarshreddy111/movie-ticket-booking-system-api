@@ -1,17 +1,16 @@
 package com.example.movieticketbookingsystem.dto;
 
 import com.example.movieticketbookingsystem.enums.UserRole;
-import lombok.ToString;
+import lombok.Builder;
 
-import java.time.LocalDate;
-
-
-public record UserRegistrationRequest (
+@Builder
+public record UserResponse(
+        String userId,
         String username,
         String email,
-        String password,
         String phoneNumber,
-        UserRole userRole,
-        LocalDate dateOfBirth
-)
-{}
+        UserRole userRole
+
+) {
+
+}

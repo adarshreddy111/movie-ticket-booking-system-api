@@ -3,11 +3,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Getter
 @Builder
-public class ResponseStructure<U> {
-    private int status;
+public class ResponseStructure<T> {
+    private int StatusCode;
     private String message;
-    private U data;
+    private T data;
 }
