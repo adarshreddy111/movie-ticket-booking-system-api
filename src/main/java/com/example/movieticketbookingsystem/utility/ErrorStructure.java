@@ -5,9 +5,9 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ErrorStructure<U>{
+public class ErrorStructure{
 
-    private int errorCode;
+    private int statusCode;
     @JsonProperty(namespace = "error_message")
     private String errorMessage;
 }
