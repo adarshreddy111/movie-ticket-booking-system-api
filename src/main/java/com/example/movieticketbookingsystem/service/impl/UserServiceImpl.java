@@ -5,20 +5,18 @@ import com.example.movieticketbookingsystem.entity.TheaterOwner;
 import com.example.movieticketbookingsystem.entity.User;
 import com.example.movieticketbookingsystem.entity.UserDetails;
 import com.example.movieticketbookingsystem.exception.UserExistByEmailException;
+import com.example.movieticketbookingsystem.mapper.UserDetailsMapper;
 import com.example.movieticketbookingsystem.repository.UserRepository;
 import com.example.movieticketbookingsystem.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import static com.example.movieticketbookingsystem.enums.UserRole.THEATER_OWNER;
-import static com.example.movieticketbookingsystem.enums.UserRole.USER;
 
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
+    private final UserDetailsMapper userMapper;
     @Override
     public UserDetails addUser(UserDetails user) {
         if (userRepository.existsByEmail(user.getEmail()))
@@ -33,18 +31,26 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    private UserDetails copy(UserDetails userRole, UserDetails user) {
-//        UserDetails userRole = user.getUserRole()==UserRole.USER ? new User() : new TheaterOwner();
-        userRole.setUserRole(user.getUserRole());
-        userRole.setEmail(user.getEmail());
-        userRole.setPassword(user.getPassword());
-        userRole.setCreatedAt(user.getCreatedAt());
-        userRole.setDateOfBirth(user.getDateOfBirth());
-        userRole.setPhoneNumber(user.getPhoneNumber());
-        userRole.setUsername(user.getUsername());
-        userRole.setUpdatedAt(user.getUpdatedAt());
-        userRole.setUserId(user.getUserId());
-        userRepository.save(userRole);
-        return userRole;
+    @Override
+    public UserDetails updateUserProfile(String email, UserRegistrationRequest user) {
+        return null;
     }
+//
+//    private UserDetails copy(UserDetails userRole, UserDetails user) {
+////        UserDetails userRole = user.getUserRole()==UserRole.USER ? new User() : new TheaterOwner();
+//        userRole.setUserRole(user.getUserRole());
+//        userRole.setEmail(user.getEmail());
+//        userRole.setPassword(user.getPassword());
+//        userRole.setCreatedAt(user.getCreatedAt());
+//        userRole.setDateOfBirth(user.getDateOfBirth());
+//        userRole.setPhoneNumber(user.getPhoneNumber());
+//        userRole.setUsername(user.getUsername());
+//        userRole.setUpdatedAt(user.getUpdatedAt());
+//        userRole.setUserId(user.getUserId());
+//        userRepository.save(userRole);
+//        return userRole;
+    UserDetails user = userMapper.toEntity(addUser,user);
+    return userRepository.save(user);
+
+}
 }
