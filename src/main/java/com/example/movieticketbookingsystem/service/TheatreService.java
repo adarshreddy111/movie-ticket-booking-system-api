@@ -8,4 +8,5 @@ public interface TheatreService {
     TheatreResponse addTheatre(String email, @Valid TheatreRegestrationRequest theatreRegestrationRequest);
 
 
+    TheatreResponse findTheater(String theaterId);
 }

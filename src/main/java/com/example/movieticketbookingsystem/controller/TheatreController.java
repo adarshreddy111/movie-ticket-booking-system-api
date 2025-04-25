@@ -8,6 +8,7 @@ import com.example.movieticketbookingsystem.utility.ResponseStructure;
 import com.example.movieticketbookingsystem.utility.RestResponseBuilder;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,10 @@ public class TheatreController {
         return restResponseBuilder.sucess(HttpStatus.OK,"Theater has been added successfully",theatreResponse);
 
     }
-
+@GetMapping("theaters/{theaterId}")
+    public ResponseEntity<ResponseStructure<TheatreResponse>> findTheater(@PathVariable String theaterId){
+        TheatreResponse theatreResponse=theatreService.findTheater(theaterId);
+        return  restResponseBuilder.sucess(HttpStatus.OK,"Theater has been successfully fetched",theatreResponse);
+}
 
 }
