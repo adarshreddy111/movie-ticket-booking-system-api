@@ -14,6 +14,8 @@ import com.example.movieticketbookingsystem.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -50,6 +52,20 @@ public class UserServiceImpl implements UserService {
         throw new UserNotFoundByEmailException("Email not found in the Database");
 
     }
+
+    @Override
+    public UserResponse softDelete(String email) {
+        if (userRepository.existsByEmail(email)) {
+            UserDetails user = userRepository.findByEmail(email);
+            user.setDelete(true);
+            user.setDeletedAt(Instant.now());
+            userRepository.save(user);
+            return userMapper.userDetailsResponseMapper(user);
+        }
+        throw new UserNotFoundByEmailException("Email not found in the Database");
+    }
+
+
 
     private UserDetails copy(UserDetails userRole, UserRegistrationRequest user) {
         userRole.setUserRole(user.userRole());

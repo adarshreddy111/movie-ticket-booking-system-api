@@ -4,7 +4,10 @@ import com.example.movieticketbookingsystem.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.Instant;
 import java.time.LocalDate;
 
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -23,6 +26,12 @@ public class UserDetails {
     @Enumerated(value = EnumType.STRING)
     private UserRole userRole;
     private LocalDate dateOfBirth;
-    private long createdAt;
-    private long updatedAt;
+    private  boolean isDelete=false;
+    private Instant deletedAt;
+
+
+    @CreatedDate
+    private Instant createdAt;
+    @LastModifiedDate
+    private Instant updatedAt;
 }

@@ -3,7 +3,6 @@ package com.example.movieticketbookingsystem.controller;
 import com.example.movieticketbookingsystem.dto.UserRegistrationRequest;
 import com.example.movieticketbookingsystem.dto.UserResponse;
 import com.example.movieticketbookingsystem.dto.UserUpdationRequest;
-import com.example.movieticketbookingsystem.entity.UserDetails;
 import com.example.movieticketbookingsystem.service.UserService;
 import com.example.movieticketbookingsystem.utility.ResponseStructure;
 import com.example.movieticketbookingsystem.utility.RestResponseBuilder;
@@ -31,4 +30,10 @@ public class UserController {
         UserResponse userDetails = userService.editUser(user, email);
         return responseBuilder.sucess(HttpStatus.OK,"User Details has been updated", userDetails);
     }
+    @DeleteMapping("/users/{email}")
+    public ResponseEntity<ResponseStructure<UserResponse>> softDelete(@PathVariable String email) {
+        UserResponse userDetails = userService.softDelete(email);
+        return responseBuilder.sucess(HttpStatus.OK, "User account has been soft deleted", userDetails);
+    }
+
 }
