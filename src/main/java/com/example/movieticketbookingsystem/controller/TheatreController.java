@@ -1,6 +1,6 @@
 package com.example.movieticketbookingsystem.controller;
 
-import com.example.movieticketbookingsystem.dto.TheatreRegestrationRequest;
+import com.example.movieticketbookingsystem.dto.TheatreRequest;
 import com.example.movieticketbookingsystem.dto.TheatreRequest;
 import com.example.movieticketbookingsystem.dto.TheatreResponse;
 import com.example.movieticketbookingsystem.entity.Theater;
