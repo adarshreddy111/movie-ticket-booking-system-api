@@ -1,6 +1,6 @@
 package com.example.movieticketbookingsystem.controller;
 
-import com.example.movieticketbookingsystem.dto.TheatreRegestrationRequest;
+import com.example.movieticketbookingsystem.dto.TheatreRequest;
 import com.example.movieticketbookingsystem.dto.TheatreRequest;
 import com.example.movieticketbookingsystem.dto.TheatreResponse;
 import com.example.movieticketbookingsystem.entity.Theater;
@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,6 +21,7 @@ public class TheatreController {
     private final TheatreService theatreService;
     private final RestResponseBuilder restResponseBuilder;
 
+    @PreAuthorize("hasAuthority('THEATER_OWNER')")
     @PostMapping("/theaters")
     public ResponseEntity<ResponseStructure<TheatreResponse>> addTheatre(String email , @Valid @RequestBody TheatreRequest theatreRequest){
         TheatreResponse theatreResponse=theatreService.addTheatre(email,theatreRequest);

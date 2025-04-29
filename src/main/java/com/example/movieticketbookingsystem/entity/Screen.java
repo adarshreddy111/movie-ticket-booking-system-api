@@ -1,42 +1,42 @@
 package com.example.movieticketbookingsystem.entity;
 
+import com.example.movieticketbookingsystem.enums.ScreenType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@EntityListeners(AuditingEntityListener.class)
 @Setter
 @Getter
 @ToString
-public class Theater {
-
+@Entity
+@EntityListeners(AuditingEntityListener.class)
+public class Screen {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String theaterId;
-    private String name;
-    private String address;
-    private String city;
-    private String landmark;
-
-    @ManyToOne
-    private TheaterOwner theaterOwner;
+    private String screenId;
+    @Enumerated(value = EnumType.STRING)
+    private ScreenType screenType;
+    private Integer capacity;
+    private Integer noOfRows;
 
     @CreatedDate
     private Instant createdAt;
-    @LastModifiedBy
+    @LastModifiedDate
     private Instant updatedAt;
-    private String createdBy;
 
-   @OneToMany(mappedBy = "theater")
-    private List<Screen> screens;
+    private String createdBy;
+    private  String theaterId;
+
+    @ManyToOne
+    private  Theater theater;
+
+    @OneToMany(mappedBy = "screen")
+    private List<Seat> seats;
 }
