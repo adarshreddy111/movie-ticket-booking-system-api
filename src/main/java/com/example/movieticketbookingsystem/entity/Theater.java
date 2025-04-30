@@ -10,6 +10,8 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -34,4 +36,7 @@ public class Theater {
     @LastModifiedBy
     private Instant updatedAt;
     private String createdBy;
+
+   @OneToMany(mappedBy = "theater")
+    private List<Screen> screens;
 }

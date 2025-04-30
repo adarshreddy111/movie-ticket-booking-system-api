@@ -8,14 +8,15 @@ import org.springframework.stereotype.Component;
 public class ScreenMapper {
 
     public ScreenResponse screenResponseMapper(Screen screen) {
-        if (screen == null)
+        if (screen == null) {
             return null;
-        return new ScreenResponse(
-                screen.getScreenId(),
-                screen.getScreenType(),
-                screen.getCapacity(),
-                screen.getNoOfRows()
+        }
 
-        );
+        return ScreenResponse.builder()
+                .screenId(screen.getScreenId())
+                .screenType(screen.getScreenType())
+                .capacity(screen.getCapacity())
+                .noOfRows(screen.getNoOfRows())
+                .build();
     }
 }

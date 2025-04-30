@@ -15,6 +15,4 @@ public record ScreenRequest(
         @NotNull(message = "Number of rows is required")
         @Min(value = 1, message = "Number of rows must be at least 1")
         Integer noOfRows
-
-) {
-}
+) {}

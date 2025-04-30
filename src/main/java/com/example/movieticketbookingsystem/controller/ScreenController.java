@@ -5,6 +5,7 @@ import com.example.movieticketbookingsystem.dto.ScreenResponse;
 import com.example.movieticketbookingsystem.service.ScreenService;
 import com.example.movieticketbookingsystem.utility.ResponseStructure;
 import com.example.movieticketbookingsystem.utility.RestResponseBuilder;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,17 +15,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-    @AllArgsConstructor
-    public class ScreenController {
+@AllArgsConstructor
+public class ScreenController {
 
-        private final ScreenService screenService;
-        private final RestResponseBuilder responseBuilder;
+    private final ScreenService screenService;
+    private final RestResponseBuilder restResponseBuilder;
 
-        @PostMapping("theaters/{theaterId}/screens")
-        public ResponseEntity<ResponseStructure<ScreenResponse>> addScreen(@RequestBody ScreenRequest screenRequest, @PathVariable String theaterId){
-            ScreenResponse screenResponse = screenService.addScreen(screenRequest, theaterId);
-            return responseBuilder.sucess(HttpStatus.OK, "Screen has been successfully created", screenResponse);
-        }
-
-
+    @PostMapping("/theaters/{theaterId}/screens")
+    public ResponseEntity<ResponseStructure<ScreenResponse>> addScreen(@PathVariable String theaterId,
+                                                                        @Valid @RequestBody ScreenRequest screenRequest) {
+        ScreenResponse screenResponse = screenService.addScreen(screenRequest, theaterId);
+        return restResponseBuilder.sucess(HttpStatus.OK, "Screen has been successfully created", screenResponse);
     }
+}

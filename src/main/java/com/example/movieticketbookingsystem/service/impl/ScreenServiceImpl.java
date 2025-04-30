@@ -27,37 +27,36 @@ public class ScreenServiceImpl implements ScreenService {
     private final ScreenMapper screenMapper;
 
     @Override
-    public ScreenResponse addScreen(ScreenRequest screenRequest, String theaterId) {
+    public ScreenResponse addScreen(String theaterId, ScreenRequest screenRequest) {
+        Theater theater = theaterRepository.findById(theaterId)
+                .orElseThrow(() -> new TheaterNotFoundByIdException("No Theater found by ID"));
 
-        if(theaterRepository.existsById(theaterId)){
-            Theater theater = theaterRepository.findById(theaterId).get();
-            Screen screen = copy(screenRequest, new Screen(), theater);
-            return screenMapper.screenResponseMapper(screen);
-        }
+        Screen screen = mapToScreen(screenRequest, theater);
+        screenRepository.save(screen);
 
-        throw new TheaterNotFoundByIdException("No Theater found by ID");
+        List<Seat> seats = generateSeats(screen, screenRequest.capacity());
+        seatRepository.saveAll(seats);
+        screen.setSeats(seats);
 
+        return screenMapper.screenResponseMapper(screen);
     }
 
-    private Screen copy(ScreenRequest screenRequest, Screen screen, Theater theater){
-        screen.setScreenType(screenRequest.screenType());
-        screen.setCapacity(screenRequest.capacity());
-        screen.setNoOfRows(screenRequest.noOfRows());
+    private Screen mapToScreen(ScreenRequest request, Theater theater) {
+        Screen screen = new Screen();
+        screen.setScreenType(request.screenType());
+        screen.setCapacity(request.capacity());
+        screen.setNoOfRows(request.noOfRows());
         screen.setTheater(theater);
-        screenRepository.save(screen);
-        screen.setSeats(createSeats(screen, screenRequest.capacity() ));
         return screen;
     }
 
-    private List<Seat> createSeats (Screen screen, Integer capacity){
+    private List<Seat> generateSeats(Screen screen, Integer capacity) {
         List<Seat> seats = new LinkedList<>();
-        for (int i = 1; i<= capacity; i++){
+        for (int i = 1; i <= capacity; i++) {
             Seat seat = new Seat();
             seat.setScreen(screen);
-            seatRepository.save(seat);
             seats.add(seat);
         }
         return seats;
     }
-
 }
