@@ -5,6 +5,7 @@ import com.example.movieticketbookingsystem.dto.ScreenResponse;
 import com.example.movieticketbookingsystem.entity.Screen;
 import com.example.movieticketbookingsystem.entity.Seat;
 import com.example.movieticketbookingsystem.entity.Theater;
+import com.example.movieticketbookingsystem.exception.ScreenNotFoundByIdException;
 import com.example.movieticketbookingsystem.exception.TheaterNotFoundByIdException;
 import com.example.movieticketbookingsystem.mapper.ScreenMapper;
 import com.example.movieticketbookingsystem.repository.ScreenRepository;
@@ -39,6 +40,19 @@ public class ScreenServiceImpl implements ScreenService {
         screen.setSeats(seats);
 
         return screenMapper.screenResponseMapper(screen);
+    }
+
+    @Override
+    public ScreenResponse findScreen(String theaterId, String screenId) {
+
+        if (theaterRepository.existsById(theaterId)) {
+            if (screenRepository.existsById(screenId)) {
+                return screenMapper.screenResponseMapper(screenRepository.findById(screenId).get());
+            }
+            throw new ScreenNotFoundByIdException("Screen Not Found by Id");
+        }
+        throw new TheaterNotFoundByIdException("Theater not found by Id");
+
     }
 
     private Screen mapToScreen(ScreenRequest request, Theater theater) {
