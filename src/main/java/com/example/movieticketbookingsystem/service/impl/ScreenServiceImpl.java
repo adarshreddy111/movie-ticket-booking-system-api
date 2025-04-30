@@ -3,6 +3,7 @@ package com.example.movieticketbookingsystem.service.impl;
 import com.example.movieticketbookingsystem.dto.ScreenRequest;
 import com.example.movieticketbookingsystem.dto.ScreenResponse;
 
+import com.example.movieticketbookingsystem.exception.NoOfRowsExceedCapacityException;
 import com.example.movieticketbookingsystem.repository.ScreenRepository;
 
 import com.example.movieticketbookingsystem.entity.Screen;
@@ -11,7 +12,6 @@ import com.example.movieticketbookingsystem.entity.Theater;
 import com.example.movieticketbookingsystem.exception.ScreenNotFoundByIdException;
 import com.example.movieticketbookingsystem.exception.TheaterNotFoundByIdException;
 import com.example.movieticketbookingsystem.mapper.ScreenMapper;
-import com.example.movieticketbookingsystem.repository.ScreenRepository;
 import com.example.movieticketbookingsystem.repository.SeatRepository;
 
 import com.example.movieticketbookingsystem.repository.TheatreRepository;
@@ -24,18 +24,9 @@ import org.springframework.stereotype.Service;
 import java.util.LinkedList;
 import java.util.List;
 
-
 @Service
 @AllArgsConstructor
 public class ScreenServiceImpl implements ScreenService {
-
-
-    private final ScreenRepository screenRepository;
-    private final TheatreRepository theatreRepository;
-
-    @Override
-    public ScreenResponse addScreen(String theaterId, ScreenRequest screenRequest) {
-        return null;
 
     private final TheatreRepository theaterRepository;
     private final ScreenRepository screenRepository;
@@ -43,23 +34,20 @@ public class ScreenServiceImpl implements ScreenService {
     private final ScreenMapper screenMapper;
 
     @Override
-    public ScreenResponse addScreen(String theaterId, ScreenRequest screenRequest) {
-        Theater theater = theaterRepository.findById(theaterId)
-                .orElseThrow(() -> new TheaterNotFoundByIdException("No Theater found by ID"));
+    public ScreenResponse addScreen(String theaterId,ScreenRequest screenRequest) {
 
-        Screen screen = mapToScreen(screenRequest, theater);
-        screenRepository.save(screen);
+        if (theaterRepository.existsById(theaterId)) {
+            Theater theater = theaterRepository.findById(theaterId).get();
+            Screen screen = copy(screenRequest, new Screen(), theater);
+            return screenMapper.screenResponseMapper(screen);
+        }
 
-        List<Seat> seats = generateSeats(screen, screenRequest.capacity());
-        seatRepository.saveAll(seats);
-        screen.setSeats(seats);
+        throw new TheaterNotFoundByIdException("No Theater found by ID");
 
-        return screenMapper.screenResponseMapper(screen);
     }
 
     @Override
     public ScreenResponse findScreen(String theaterId, String screenId) {
-
         if (theaterRepository.existsById(theaterId)) {
             if (screenRepository.existsById(screenId)) {
                 return screenMapper.screenResponseMapper(screenRepository.findById(screenId).get());
@@ -67,26 +55,40 @@ public class ScreenServiceImpl implements ScreenService {
             throw new ScreenNotFoundByIdException("Screen Not Found by Id");
         }
         throw new TheaterNotFoundByIdException("Theater not found by Id");
-
     }
 
-    private Screen mapToScreen(ScreenRequest request, Theater theater) {
-        Screen screen = new Screen();
-        screen.setScreenType(request.screenType());
-        screen.setCapacity(request.capacity());
-        screen.setNoOfRows(request.noOfRows());
+
+
+    private Screen copy(ScreenRequest screenRequest, Screen screen, Theater theater) {
+        screen.setScreenType(screenRequest.screenType());
+        screen.setCapacity(screenRequest.capacity());
+        if (screenRequest.noOfRows() > screenRequest.capacity())
+            throw new NoOfRowsExceedCapacityException("The no.of rows exceed the capacity");
+        screen.setNoOfRows(screenRequest.noOfRows());
         screen.setTheater(theater);
+        screenRepository.save(screen);
+        screen.setSeats(createSeats(screen, screenRequest.capacity()));
         return screen;
     }
 
-    private List<Seat> generateSeats(Screen screen, Integer capacity) {
+    private List<Seat> createSeats(Screen screen, Integer capacity) {
         List<Seat> seats = new LinkedList<>();
-        for (int i = 1; i <= capacity; i++) {
+        int noOfSeatsPerRow = screen.getCapacity() / screen.getNoOfRows();
+        char row = 'A';
+        for (int i = 1, j = 1; i <= capacity; i++, j++) {
             Seat seat = new Seat();
             seat.setScreen(screen);
+            seat.setName(row + "" + j);
+            seatRepository.save(seat);
             seats.add(seat);
+            if (j == noOfSeatsPerRow) {
+                j = 0;
+                row++;
+            }
         }
         return seats;
-
     }
+
+
+
 }
