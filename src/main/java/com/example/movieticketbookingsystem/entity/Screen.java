@@ -12,6 +12,34 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.Instant;
 import java.util.List;
 
+
+@Setter
+@Getter
+@ToString
+@Entity
+@EntityListeners(AuditingEntityListener.class)
+public class Screen {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String screenId;
+    @Enumerated(value = EnumType.STRING)
+    private ScreenType screenType;
+    private Integer capacity;
+    private Integer noOfRows;
+
+    @CreatedDate
+    private Instant createdAt;
+    @LastModifiedDate
+    private Instant updatedAt;
+
+    private String createdBy;
+    private  String theaterId;
+
+    @ManyToOne
+    private  Theater theater;
+
+    @OneToMany(mappedBy = "screen")
+
 @Entity
 @Getter
 @Setter
@@ -42,5 +70,6 @@ public class Screen {
     private Theater theater;
 
     @OneToMany(mappedBy = "screen", cascade = CascadeType.PERSIST)
+
     private List<Seat> seats;
 }

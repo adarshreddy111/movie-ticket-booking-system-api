@@ -7,6 +7,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class ScreenMapper {
 
+
+    public ScreenResponse screenResponseMapper(Screen screen){
+        return null;
+
     public ScreenResponse screenResponseMapper(Screen screen) {
         if (screen == null) {
             return null;
@@ -18,5 +22,6 @@ public class ScreenMapper {
                 .capacity(screen.getCapacity())
                 .noOfRows(screen.getNoOfRows())
                 .build();
+
     }
 }
