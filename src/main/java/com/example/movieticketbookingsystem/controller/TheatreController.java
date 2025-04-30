@@ -28,7 +28,7 @@ public class TheatreController {
         return restResponseBuilder.sucess(HttpStatus.OK,"Theater has been added successfully",theatreResponse);
 
     }
-@GetMapping("theaters/{theaterId}")
+    @GetMapping("theaters/{theaterId}")
     public ResponseEntity<ResponseStructure<TheatreResponse>> findTheater(@PathVariable String theaterId){
         TheatreResponse theatreResponse=theatreService.findTheater(theaterId);
         return  restResponseBuilder.sucess(HttpStatus.OK,"Theater has been successfully fetched",theatreResponse);
