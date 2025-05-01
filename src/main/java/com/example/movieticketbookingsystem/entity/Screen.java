@@ -1,6 +1,7 @@
 package com.example.movieticketbookingsystem.entity;
 
 import com.example.movieticketbookingsystem.enums.ScreenType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,32 +14,7 @@ import java.time.Instant;
 import java.util.List;
 
 
-@Setter
-@Getter
-@ToString
-@Entity
-@EntityListeners(AuditingEntityListener.class)
-public class Screen {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String screenId;
-    @Enumerated(value = EnumType.STRING)
-    private ScreenType screenType;
-    private Integer capacity;
-    private Integer noOfRows;
 
-    @CreatedDate
-    private Instant createdAt;
-    @LastModifiedDate
-    private Instant updatedAt;
-
-    private String createdBy;
-    private  String theaterId;
-
-    @ManyToOne
-    private  Theater theater;
-
-    @OneToMany(mappedBy = "screen")
 
 @Entity
 @Getter
@@ -69,7 +45,10 @@ public class Screen {
     @ManyToOne
     private Theater theater;
 
-    @OneToMany(mappedBy = "screen", cascade = CascadeType.PERSIST)
-
+    @OneToMany(mappedBy = "screen", cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
     private List<Seat> seats;
+
+    @OneToMany(mappedBy = "screen",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Show> shows;
 }

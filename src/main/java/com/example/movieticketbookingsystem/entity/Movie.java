@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -43,4 +44,6 @@ public class Movie {
     @Column(name = "genre")
     private Genre genre;
 
+    @OneToMany(mappedBy = "movie",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private Set<Show> shows = new HashSet<>();
 }
