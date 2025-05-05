@@ -1,6 +1,8 @@
 package com.example.movieticketbookingsystem.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -9,6 +11,8 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "show")
+@Setter
+@Getter
 public class Show {
 
     @Id
