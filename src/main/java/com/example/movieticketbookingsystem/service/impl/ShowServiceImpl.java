@@ -18,7 +18,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -42,7 +41,7 @@ public class ShowServiceImpl implements ShowService {
                 if (movieRepository.existsById(movieId)) {
 
                     Screen screen = screenRepository.findById(screenId).get();
-                    Set<Show> shows = screen.getShows();
+                    Set<Show> shows =  screen.getShows();
 
 
                     Movie movie = movieRepository.findById(movieId).get();

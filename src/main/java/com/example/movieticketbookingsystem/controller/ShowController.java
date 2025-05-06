@@ -31,7 +31,7 @@ public class ShowController {
     @PostMapping("theaters/{theaterId}/screens/{screenId}/shows")
     @PreAuthorize("hasAuthority('THEATER_OWNER')")
     public ResponseEntity<ResponseStructure<ShowResponse>> addShow(@PathVariable String theaterId, @PathVariable String screenId,String movieId, @NotNull Long startTime){
-       ShowResponse showResponse=showService.addShow(theaterId,screenId,movieId,startTime);
+       ShowResponse showResponse    =showService.addShow(theaterId,screenId,movieId,startTime);
        return restResponseBuilder.sucess(HttpStatus.OK,"Show added successfully",showResponse);
     }
 

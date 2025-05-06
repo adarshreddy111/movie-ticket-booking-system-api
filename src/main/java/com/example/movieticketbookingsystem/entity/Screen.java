@@ -12,9 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 import java.util.List;
-
-
-
+import java.util.Set;
 
 @Entity
 @Getter
@@ -50,5 +48,5 @@ public class Screen {
 
     @OneToMany(mappedBy = "screen",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<Show> shows;
+    private Set<Show> shows;
 }
